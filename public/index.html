@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles.css" rel="stylesheet">
-    <script defer src="script.js"></script>
+    <!-- <script src="./node_modules/axios/dist/axios.min.js"></script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./script.js"></script>
     <title>Weather App</title>
 </head>
 <body>
@@ -26,7 +28,7 @@
             </div>
             <div class="detail">
                 <div class="title">Temperature</div>
-                <div class="value">TBD</div>
+                <div class="value" id="temperature" data-temperature>TBD</div>
             </div>
             <div class="detail">
                 <div class="title">Precipitation</div>
@@ -34,12 +36,12 @@
             </div>
             <div class="city-search-container">
                 <!-- <input type="text" class="city-search" data-city-search placeholder="Enter a location"> -->
-                <form action="/" method="POST">
-                    <!-- <input type="text" name="city" id="city"> -->
+                <!-- <form action="/" method="POST">
                     <input type="text" name="city" class="city-search" data-city-search placeholder="Enter a location">
-
                     <button type="submit">Search</button>
-                </form>
+                </form> -->
+                <input type="text" name="city" id="city" placeholder="Enter a location"/>
+                <button type="button" onclick="getSubmit()">Search</button>
             </div>
         </div>
     </div>

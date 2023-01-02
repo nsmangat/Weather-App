@@ -17,10 +17,12 @@ app.get('/', (req,res) => {
 })
 
 app.post('/', async (req, res) => {
+    console.log(req.body)
     const location = req.body.city
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${OPENWEATHER_API_KEY}&units=metric`
     const response = await axios(url)
     console.log(response.data)
+    res.json(response.data)
 })
 
 app.post('/form', (req, res) => {
