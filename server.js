@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 //const axios = require('axios')
 const mongoose = require('mongoose')
 const app = express()
+const cors = require('cors')
 
 mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(express.json())
 app.use(express.static('public'))
+app.use(cors())
 
 const weatherAppRouter = require('./routes/weather')
 app.use('/weather', weatherAppRouter)
@@ -46,6 +48,6 @@ app.use('/weather', weatherAppRouter)
 //     console.log('called')
 // })
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log('The server has started')
 })

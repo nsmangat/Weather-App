@@ -16,8 +16,8 @@ router.get('/', (req,res) => {
 router.post('/', async (req, res) => {
     console.log('posting')
     const user = new User({
-        username: 'test2',
-        password: 'password2',
+        username: 'test3',
+        password: 'password3',
         city: req.body.city
     })
     try {
@@ -36,9 +36,12 @@ router.post('/login', async (req, res) => {
     //console.log(user.length)
     if (user != null) {
         console.log("User exists")
+        res.status(201).json({message: 'exists'})
     }
     else {
         console.log('User does not exist')
+        res.status(201).json({message: 'does not exist'})
+
     }
 })
 
