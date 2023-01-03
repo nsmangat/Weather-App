@@ -17,7 +17,7 @@ function getSubmit() {
     const city = document.getElementById('city').value 
 
     console.log(city)
-    axios.post('http://localhost:3000/', {
+    axios.post('http://localhost:3000/weather', {
         city: city
     })
     .then(response => {
