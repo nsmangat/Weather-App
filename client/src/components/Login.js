@@ -23,20 +23,24 @@ function Login() {
 
   const login = () => {
     console.log("trying login");
-    console.log(username)
-    // axios.post('http://localhost:3001/weather/login', {
-    //     username: username,
-    //     password: password
-    // })
-    // .then(response => {
-    //     const data = response.data
-    //     console.log(data)
-    // });
-
-    const test = 'test'
-    // WeatherDisplay weatherTest
+    axios.post('http://localhost:3001/weather/login', {
+        username: username,
+        password: password
+    })
+    .then(response => {
+        // const data = response.data
+        // console.log(data)
+        // console.log('/n/n')
+        // console.log(response.data.user)
+        // console.log('/n/n')
+        // console.log(response.data.sendWeatherData)
+        //send user as well from here, right now have backend re-sending
+        if(response.data.sendWeatherData) {
+            navigate("/WeatherDisplay", {state: response.data.sendWeatherData})
+        }
+    });
     
-    navigate("/weatherDisplay", {state: test})
+    //navigate("/weatherDisplay", {state: test})
   };
 
   return (
@@ -66,6 +70,7 @@ function Login() {
             </button>
           </div>
       </div>
+      <h3>{username}</h3>
     </div>
   );
 }
