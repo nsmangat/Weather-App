@@ -14,24 +14,24 @@ router.get('/', (req,res) => {
 
 
 router.post('/', async (req, res) => {
-    console.log('posting')
-    const user = new User({
-        username: 'test3',
-        password: 'password3',
-        city: req.body.city
-    })
-    try {
-        const newUser = await user.save()
-        res.status(201).json(newUser)
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
+    // console.log('posting')
+    // const user = new User({
+    //     username: 'test3',
+    //     password: 'password3',
+    //     city: req.body.city
+    // })
+    // try {
+    //     const newUser = await user.save()
+    //     res.status(201).json(newUser)
+    // } catch (err) {
+    //     res.status(400).json({message: err.message})
+    // }
 })
 
 router.post('/login', async (req, res) => {
-    const username = 'test2'
-    const password = 'password2'
-    const user = await User.findOne({username: username, password: password})
+    // const username = 'test2'
+    // const password = 'password2'
+    const user = await User.findOne({username: req.body.username, password: req.body.password})
     console.log(user)
     //console.log(user.length)
     if (user != null) {
