@@ -12,32 +12,58 @@ import { useLocation } from "react-router-dom";
 
 function WeatherDisplay() {
   const [city, setCity] = useState("");
+  const [searchCity, setSearchCity] = useState("")
+  const [temperature, setTemperature] = useState("");
+  const [windSpeed, setWindSpeed] = useState("")
+  const [precipitation, setPrecipitation] = useState("")
 
   const location = useLocation();
-  console.log(location.state.city)
+  console.log(location.state)
+
+  useEffect(() => {
+    getInitialWeather();
+  }, []);
+
+  const getInitialWeather = () => {
+     axios.post('http://localhost:3001/weather/initialcity', {
+        username: location.state,
+    })
+    .then(response => {
+      if (response.data.sendWeatherData) {
+          setCity(response.data.sendWeatherData.city)
+          setWindSpeed(response.data.sendWeatherData.windSpeed)
+          setTemperature(response.data.sendWeatherData.temperature)
+          setPrecipitation(response.data.sendWeatherData.precipitation)
+          //window.location.reload()
+      } 
+    });
+  }
 
   const newCity = () => {
     console.log("trying new city");
     console.log(city);
-    console.log(location.state.username);
+    console.log(location.state);
     axios
       .post("http://localhost:3001/weather/newcity", {
-        username: location.state.username,
-        city: city,
+        username: location.state,
+        city: searchCity,
       })
       .then((response) => {
         if (response.data.sendWeatherData) {
-          console.log(response.data.sendWeatherData);
-          location.state.city = response.data.sendWeatherData.city;
-          location.state.windSpeed = response.data.sendWeatherData.windSpeed;
-          location.state.temperature =
-            response.data.sendWeatherData.temperature;
-          location.state.precipitation =
-            response.data.sendWeatherData.precipitation;
-          console.log(location.state.city);
-          console.log(city)
-          
-          window.location.reload()
+          // console.log(response.data.sendWeatherData);
+          // location.state.city = response.data.sendWeatherData.city;
+          // location.state.windSpeed = response.data.sendWeatherData.windSpeed;
+          // location.state.temperature =
+          //   response.data.sendWeatherData.temperature;
+          // location.state.precipitation =
+          //   response.data.sendWeatherData.precipitation;
+          // console.log(location.state.city);
+          // console.log(city)
+          setCity(response.data.sendWeatherData.city)
+          setWindSpeed(response.data.sendWeatherData.windSpeed)
+          setTemperature(response.data.sendWeatherData.temperature)
+          setPrecipitation(response.data.sendWeatherData.precipitation)
+          //window.location.reload()
         }
       });
   };
@@ -49,29 +75,29 @@ function WeatherDisplay() {
         <div >
         </div>
         <div>
-          <div className="location">{location.state.city}</div>
+          <div className="location">{city}</div>
         </div>
         <div className="detail-section">
           <div className="detail">
             <div className="title">Wind</div>
-            <div className="value">{location.state.windSpeed}</div>
+            <div className="value">{windSpeed}</div>
           </div>
           <div className="detail">
             <div className="title">Temperature</div>
             <div className="value" id="temperature" data-temperature>
-              {location.state.temperature}
+              {temperature}
             </div>
           </div>
           <div>
             <div>Precipitation</div>
-            <div>{location.state.precipitation}</div>
+            <div>{precipitation}</div>
           </div>
           <div>
             <label>Search for new city</label>
             <input
               type="text"
               name="city"
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) => setSearchCity(e.target.value)}
             />
             <div>
               <button onClick={newCity}>

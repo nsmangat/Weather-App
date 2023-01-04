@@ -35,8 +35,10 @@ function Login() {
         // console.log('/n/n')
         // console.log(response.data.sendWeatherData)
         //send user as well from here, right now have backend re-sending
-        if(response.data.sendWeatherData) {
-            navigate("/WeatherDisplay", {state: response.data.sendWeatherData})
+        console.log(response.data)
+        if(response.data.username) {
+          console.log(response.data.username)
+            navigate("/WeatherDisplay", {state: response.data.username})
         }
     });
     
