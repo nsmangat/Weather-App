@@ -29,18 +29,16 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    // const username = 'test2'
-    // const password = 'password2'
+
     const user = await User.findOne({username: req.body.username, password: req.body.password})
     console.log(user)
-    //console.log(user.length)
     if (user != null) {
         console.log("User exists")
-        res.status(201).json({message: 'exists'})
+        res.status(201).json(user)
     }
     else {
         console.log('User does not exist')
-        res.status(201).json({message: 'does not exist'})
+        res.status(400).json({message: err.message})
 
     }
 })
