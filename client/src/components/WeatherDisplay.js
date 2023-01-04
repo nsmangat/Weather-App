@@ -6,57 +6,82 @@ import { useLocation } from "react-router-dom";
 
 //display: temp, wind speed, weather[0].main, city
 
+//need to change from using location state I think
+//can try by having use effect, initializes the data like city to display that
+//then call the route and update like that?
+
 function WeatherDisplay() {
   const [city, setCity] = useState("");
 
   const location = useLocation();
-  console.log(location.state);
+  console.log(location.state.city)
 
   const newCity = () => {
-
-   
+    console.log("trying new city");
+    console.log(city);
+    console.log(location.state.username);
+    axios
+      .post("http://localhost:3001/weather/newcity", {
+        username: location.state.username,
+        city: city,
+      })
+      .then((response) => {
+        if (response.data.sendWeatherData) {
+          console.log(response.data.sendWeatherData);
+          location.state.city = response.data.sendWeatherData.city;
+          location.state.windSpeed = response.data.sendWeatherData.windSpeed;
+          location.state.temperature =
+            response.data.sendWeatherData.temperature;
+          location.state.precipitation =
+            response.data.sendWeatherData.precipitation;
+          console.log(location.state.city);
+          console.log(city)
+          
+          window.location.reload()
+        }
+      });
   };
 
+  
   return (
     <div className="WeatherDisplay">
-      <div class="container">
-        <div class="header">
-          <div class="icon-container">
-            <canvas id="icon" width="100" height="100"></canvas>
-          </div>
+      <div>
+        <div >
         </div>
-        <div class="content">
-          <div class="location">{location.state.city}</div>
+        <div>
+          <div className="location">{location.state.city}</div>
         </div>
-        <div class="detail-section">
-          <div class="detail">
-            <div class="title">Wind</div>
-            <div class="value">{location.state.windSpeed}</div>
+        <div className="detail-section">
+          <div className="detail">
+            <div className="title">Wind</div>
+            <div className="value">{location.state.windSpeed}</div>
           </div>
-          <div class="detail">
-            <div class="title">Temperature</div>
-            <div class="value" id="temperature" data-temperature>
+          <div className="detail">
+            <div className="title">Temperature</div>
+            <div className="value" id="temperature" data-temperature>
               {location.state.temperature}
             </div>
           </div>
-          <div class="detail">
-            <div class="title">Precipitation</div>
-            <div class="value">{location.state.precipitation}</div>
+          <div>
+            <div>Precipitation</div>
+            <div>{location.state.precipitation}</div>
           </div>
-          <div class="city-search-container">
+          <div>
+            <label>Search for new city</label>
             <input
               type="text"
               name="city"
-              id="city"
-              placeholder="Enter a location"
+              onChange={(e) => setCity(e.target.value)}
             />
-            <button type="button" onclick="getSubmit()">
-              Search
-            </button>
+            <div>
+              <button onClick={newCity}>
+                Search
+                </button>
+            </div>
           </div>
         </div>
       </div>
-      <a href="https://openweathermap.org/" class="openweather-credit">
+      <a href="https://openweathermap.org/" className="openweather-credit">
         Weather data provided by OpenWeather
       </a>
     </div>

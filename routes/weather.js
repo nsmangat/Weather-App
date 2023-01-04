@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
         // const temperature = weatherData.main.temp
         // const precipitation = weatherData.weather[0].main
         // const windSpeed = weatherData.wind.windSpeed
-        const sendWeatherData = {temperature: weatherData.main.temp, precipitation: weatherData.weather[0].main, windSpeed: weatherData.wind.speed, city: user.city, user: user.username}
+        const sendWeatherData = {temperature: weatherData.main.temp, precipitation: weatherData.weather[0].main, windSpeed: weatherData.wind.speed, city: user.city, username: user.username}
         //JSON.stringify(sendWeatherData)
         console.log(sendWeatherData)
         //can make user data being sent more specific
@@ -72,14 +72,19 @@ router.post('/register', async (req, res) => {
 
 router.post('/newcity', async (req, res) => {
     console.log('adjusting for new city')
-    const user = new User({
-        username: 'test2',
-        password: 'password2',
-        city: 'test city'
-    })
+    console.log(req.body.city)
+    const user = await User.findOne({username: req.body.username})
+    console.log(user)
+    user.city = req.body.city
     try {
-        const newUser = await user.save()
-        res.status(201).json(newUser)
+        const updatedUser = await user.save()
+        const location = user.city
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${OPENWEATHER_API_KEY}&units=metric`
+        const response = await axios(url)
+        const {data: weatherData} = response
+        const sendWeatherData = {temperature: weatherData.main.temp, precipitation: weatherData.weather[0].main, windSpeed: weatherData.wind.speed, city: user.city, username: user.username}
+        console.log(sendWeatherData)
+        res.status(201).json({sendWeatherData})
     } catch (err) {
         res.status(400).json({message: err.message})
     }
