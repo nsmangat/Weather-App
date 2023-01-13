@@ -59,21 +59,6 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.post('/register', async (req, res) => {
-    console.log('posting')
-    const user = new User({
-        username: 'test2',
-        password: 'password2',
-        city: 'test city'
-    })
-    try {
-        const newUser = await user.save()
-        res.status(201).json(newUser)
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-})
-
 router.post('/newcity', async (req, res) => {
     console.log('adjusting for new city')
     console.log(req.body.city)
@@ -107,6 +92,48 @@ router.post('/initialcity', async (req, res) => {
         res.status(201).json({sendWeatherData})
     } catch (err) {
         res.status(400).json({message: err.message})
+    }
+})
+
+router.post('/register', async (req, res) => {
+    console.log('register')
+    const user = await User.findOne({username: req.body.username})
+    if(!user) {
+        console.log("register success")
+        const user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        city: req.body.city
+    })
+    try {
+        await user.save()
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+        const registerStatus = "Account creation successful! Please login with these credentials"
+        res.status(201).json({registerStatus})
+    }
+    else {
+        console.log("register fail")
+        const registerStatus = "Sorry, that username already exists. Please try again"
+        res.status(201).json({registerStatus})
+    }
+})
+
+
+//Manual delete so don't have to do it through MongoDB everytime
+router.delete('/:accountToDelete', async (req, res) => {
+    console.log('Trying delete')
+    console.log(req.params.accountToDelete)
+    
+    try {
+        const accountToDelete = await User.findOne({username: req.params.accountToDelete})
+        if(accountToDelete) {
+            await accountToDelete.remove()
+            console.log("User deleted")
+        }
+    } catch (err) {
+        console.log("Error deleting user")
     }
 })
 
